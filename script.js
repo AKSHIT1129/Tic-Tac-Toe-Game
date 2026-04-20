@@ -2,7 +2,6 @@ const cells = document.querySelectorAll("[data-cell]");
 const gameStatus = document.getElementById("status");
 const restartButton = document.getElementById("restart");
 const computerCheckBox = document.getElementById("computer");
-
 let computerPlaying = false;
 let currentPlayer = "X";
 let gameBoard = ["", "", "", "", "", "", "", "", ""];
@@ -10,7 +9,6 @@ let gameWon = false;
 let gameTie = false;
 let movesCount = 0;
 let wonPatternIndices = [];
-
 const winningCombinations = [
   [0, 1, 2],
   [3, 4, 5],
@@ -21,7 +19,6 @@ const winningCombinations = [
   [0, 4, 8],
   [2, 4, 6],
 ];
-
 computerCheckBox.addEventListener("change", () => {
   computerPlaying = computerCheckBox.checked;
   if (computerPlaying) {
@@ -29,11 +26,9 @@ computerCheckBox.addEventListener("change", () => {
     gameStatus.textContent = `Current Player: ${currentPlayer}`;
   }
 });
-
 function bestMove() {
   let bestScore = -Infinity;
   let bestMoveIndex = -1;
-
   for (let i = 0; i < gameBoard.length; i++) {
     if (gameBoard[i] === "") {
       tempBoard = [...gameBoard];
@@ -46,10 +41,8 @@ function bestMove() {
       }
     }
   }
-
   return bestMoveIndex;
 }
-
 function minimax(board, depth, isMaximizing) {
   const scores = {
     X: -10,
@@ -61,11 +54,9 @@ function minimax(board, depth, isMaximizing) {
   if (winner) {
     return scores[winner];
   }
-
   if (!board.includes("")) {
     return scores.tie;
   }
-
   if (isMaximizing) {
     let bestScore = -Infinity;
     for (let i = 0; i < board.length; i++) {
@@ -90,14 +81,12 @@ function minimax(board, depth, isMaximizing) {
     return bestScore;
   }
 }
-
 function computerMove() {
   if (!gameWon && movesCount < 9) {
     const index = bestMove();
     gameBoard[index] = "O";
     cells[index].textContent = "O";
     movesCount++;
-
     const winner = checkWin(gameBoard);
     if (winner) {
       gameWon = true;
@@ -111,7 +100,6 @@ function computerMove() {
     }
   }
 }
-
 function handleClicks(event) {
   const cell = event.target;
   const index = Array.from(cells).indexOf(cell);
@@ -136,7 +124,6 @@ function handleClicks(event) {
     }
   }
 }
-
 function checkWin(board) {
   for (let i = 0; i < winningCombinations.length; i++) {
     const [a, b, c] = winningCombinations[i];
@@ -154,45 +141,36 @@ function checkWin(board) {
   }
   return null;
 }
-
 function switchPlayer() {
   currentPlayer = currentPlayer === "X" ? "O" : "X";
   gameStatus.textContent = `Current Player: ${currentPlayer}`;
   clearHighlightedCells();
 }
-
 function restartGame() {
   movesCount = 0;
   currentPlayer = "X";
   gameBoard = ["", "", "", "", "", "", "", "", ""];
   gameWon = false;
   gameTie = false;
-
   cells.forEach((cell) => {
     cell.textContent = "";
     clearHighlightedCells();
   });
-
   gameStatus.textContent = `Current Player: ${currentPlayer}`;
 }
-
-
 function highlightWinningCells(indices) {
   for (const index of indices) {
     cells[index].classList.add("winner");
   }
 }
-
 function clearHighlightedCells() {
   cells.forEach((cell) => {
     cell.classList.remove("winner");
   });
 }
-
 cells.forEach((cell) => {
   cell.addEventListener("click", handleClicks);
 });
 
 restartButton.addEventListener("click", restartGame);
-
 gameStatus.textContent = `Current Player: ${currentPlayer}`;
