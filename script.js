@@ -1,3 +1,4 @@
+
 const cells = document.querySelectorAll("[data-cell]");
 const gameStatus = document.getElementById("status");
 const restartButton = document.getElementById("restart");
@@ -171,6 +172,5 @@ function clearHighlightedCells() {
 cells.forEach((cell) => {
   cell.addEventListener("click", handleClicks);
 });
-
 restartButton.addEventListener("click", restartGame);
 gameStatus.textContent = `Current Player: ${currentPlayer}`;
